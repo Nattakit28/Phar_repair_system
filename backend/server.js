@@ -112,20 +112,9 @@ app.use('/api/*', (req, res) => {
 });
 
 
-if (process.env.NODE_ENV === 'production') {
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
-    });
-} else {
-    const frontendBuildPath = path.join(__dirname, '../frontend/build');
-    const fs = require('fs');
-
-    if (fs.existsSync(frontendBuildPath)) {
-        app.get('*', (req, res) => {
-            res.sendFile(path.join(frontendBuildPath, 'index.html'));
-        });
-    }
-}
+app.use("*", (req, res) => {
+    res.status(404).json({ message: "Not found" });
+});
 
 
 async function initializeServices() {
