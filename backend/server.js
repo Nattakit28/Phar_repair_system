@@ -18,19 +18,10 @@ app.use('/api/tech-reports', techReportsRouter);
 app.use('/uploads', express.static('uploads'));
 
 
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../frontend/build')));
-} else {
-    const frontendBuildPath = path.join(__dirname, '../frontend/build');
-    const fs = require('fs');
+app.get("/", (req, res) => {
+    res.send("API is running...");
+});
 
-    if (fs.existsSync(frontendBuildPath)) {
-        console.log('[FRONTEND] Serving React build from:', frontendBuildPath);
-        app.use(express.static(frontendBuildPath));
-    } else {
-        console.log('[FRONTEND] React build not found. Run "npm run build" in frontend folder');
-    }
-}
 
 
 app.get('/api/health', (req, res) => {
