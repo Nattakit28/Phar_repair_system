@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import Layout from '../components/Layout/Layout';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import API_BASE_URL from '../config/api';
 import {
   ArrowLeft,
   Calendar,
@@ -178,10 +179,9 @@ const RepairDetail = () => {
       return filePath;
     }
 
-    const baseUrl = 'http://localhost:5000';
     const cleanPath = filePath.startsWith('/') ? filePath : `/${filePath}`;
 
-    return `${baseUrl}${cleanPath}`;
+    return `${API_BASE_URL}${cleanPath}`;
   };
 
   const getRegularImages = () => {

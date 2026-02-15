@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import API_BASE_URL from '../config/api';
 import {
   ArrowLeft,
   Save,
@@ -18,7 +19,6 @@ import {
   AlertCircle
 } from 'lucide-react';
 
-const API_BASE_URL = 'http://localhost:5000';
 const RepairEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();

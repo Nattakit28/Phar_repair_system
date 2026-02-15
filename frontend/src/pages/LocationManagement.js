@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import Layout from '../components/Layout/Layout';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import API_BASE_URL from '../config/api';
 import {
   ArrowLeft,
   Save,
@@ -19,9 +20,7 @@ import {
   AlertCircle,
   ChevronRight,
   ChevronDown
-} from 'lucide-react';
-
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
+} from 'lucide-react';            
 
 const LocationManagement = () => {
   const navigate = useNavigate();

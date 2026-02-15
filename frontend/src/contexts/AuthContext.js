@@ -29,7 +29,8 @@ export const AuthProvider = ({ children }) => {
 
     const verifyToken = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/auth/verify');
+            // ✅ เปลี่ยนจาก http://localhost:5000 เป็น relative URL
+            const response = await axios.get('/api/auth/verify');
             setUser(response.data.user);
             setIsAuthenticated(true);
         } catch (error) {
@@ -42,7 +43,8 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (credentials) => {
         try {
-            const response = await axios.post('http://localhost:5000/api/auth/login', credentials);
+            // ✅ เปลี่ยนจาก http://localhost:5000 เป็น relative URL
+            const response = await axios.post('/api/auth/login', credentials);
             const { token, user } = response.data;
 
             localStorage.setItem('token', token);
