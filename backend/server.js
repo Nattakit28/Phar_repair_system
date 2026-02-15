@@ -1,4 +1,3 @@
-
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -8,22 +7,17 @@ const techReportsRouter = require('./routes/techReports');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api/tech-reports', techReportsRouter);
 
-
 app.use('/uploads', express.static('uploads'));
 
+// ✅ Serve static files จาก React build
+app.use(express.static(path.join(__dirname, 'build')));
 
-app.get("/", (req, res) => {
-    res.send("API is running...");
-});
-
-
-
+// API Health Check
 app.get('/api/health', (req, res) => {
     res.json({
         status: 'OK',
@@ -33,7 +27,7 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-
+// Load Routes
 let authRoutes = null;
 let repairRoutes = null;
 let adminRoutes = null;
@@ -67,7 +61,6 @@ try {
     console.warn('[ROUTES] Rooms routes not found:', error.message);
 }
 
-
 if (authRoutes) {
     app.use('/api/auth', authRoutes);
     console.log('[ROUTES] Auth routes mounted at /api/auth');
@@ -88,7 +81,7 @@ if (roomsRoutes) {
     console.log('[ROUTES] Rooms routes mounted at /api/rooms');
 }
 
-
+// Error handler
 app.use((error, req, res, next) => {
     console.error('[ERROR]', error);
 
@@ -103,7 +96,7 @@ app.use((error, req, res, next) => {
     });
 });
 
-
+// ✅ API 404 handler — ต้องอยู่ก่อน wildcard
 app.use('/api/*', (req, res) => {
     console.log(`[404] API Route not found: ${req.method} ${req.url}`);
     res.status(404).json({
@@ -111,16 +104,15 @@ app.use('/api/*', (req, res) => {
     });
 });
 
-
-app.use("*", (req, res) => {
-    res.status(404).json({ message: "Not found" });
+// ✅ Wildcard — ส่ง React index.html สำหรับทุก route ที่ไม่ใช่ API
+app.use('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-
+// Initialize DB tables
 async function initializeServices() {
     try {
         console.log('[INIT] Initializing services...');
-
 
         let db = null;
         try {
@@ -130,7 +122,6 @@ async function initializeServices() {
             console.error('[INIT] Database module not found:', error.message);
             return;
         }
-
 
         try {
             await db.execute(`
@@ -149,12 +140,10 @@ async function initializeServices() {
                     UNIQUE KEY unique_room (name, building, floor, is_active)
                 )
             `);
-
             console.log('[INIT] Rooms table ready');
         } catch (dbError) {
             console.error('[INIT] Database rooms table error:', dbError.message);
         }
-
 
         try {
             await db.execute(`
@@ -170,7 +159,6 @@ async function initializeServices() {
                     INDEX idx_setting_key (setting_key)
                 )
             `);
-
             console.log('[INIT] System settings table ready');
         } catch (dbError) {
             console.error('[INIT] Database system settings table error:', dbError.message);
@@ -180,7 +168,6 @@ async function initializeServices() {
         console.error('[INIT] Error initializing services:', error);
     }
 }
-
 
 app.listen(PORT, async () => {
     console.log('='.repeat(50));
